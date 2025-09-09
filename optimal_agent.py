@@ -52,6 +52,8 @@ optimal_code_agent=Agent(
     add_datetime_to_instructions=True,
     response_model=OptimalCpde,
     use_json_mode=True,
+    exponential_backoff=True,
+    retries=2,
 )
 # Enhanced optimal_agent with stronger validation requirements
 optimal_agent_enhanced=Agent(
@@ -96,4 +98,6 @@ optimal_agent_enhanced=Agent(
     add_datetime_to_instructions=True,
     response_model=OptimalApproach,
     use_json_mode=True,
+    exponential_backoff=True,
+    retries=2,
 )

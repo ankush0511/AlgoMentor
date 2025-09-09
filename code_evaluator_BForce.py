@@ -33,5 +33,7 @@ code_evaluator = Agent(
         "6. if the code working fine then update the code to `updated_code` section in pydantic. and save to the .py file "
     ],
     show_tool_calls=True,
-    use_json_mode=True
+    use_json_mode=True,
+    exponential_backoff=True,
+    retries=2,
 )

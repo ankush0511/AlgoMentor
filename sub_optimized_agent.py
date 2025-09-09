@@ -1,4 +1,3 @@
-from code_evaluator_BForce import code_evaluator
 from agno.agent import Agent
 from pydantic import BaseModel, Field
 from agno.models.groq import Groq
@@ -20,6 +19,16 @@ class SubOptimalApproach(BaseModel):
     suboptimal_algorithm: str = Field(description="the optimized algorithm to solve the problem")
     suboptimal_time_complexity: str = Field(description="the time complexity of the optimized algorithm")
     suboptimal_space_complexity: str = Field(description="the space complexity of the optimized algorithm")
+
+class SuboptimalCode(BaseModel):
+    sub_optimal_algorithm: str = Field(description="the optimized algorithm description")
+    sub_optimal_approach: str = Field(description="the optimized approach explanation")
+    problem_statement: str = Field(description="the original problem statement")
+    basic_approach_code: str = Field(description="the basic/brute-force code")
+    sub_optimal_code: str = Field(description="the optimized implementation code")
+    time_space_complexity: str = Field(description="the time and space complexity analysis of the optimized code")
+
+
 
 suboptimal_agent = Agent(
     name="Algorithm Optimization Specialist",
@@ -61,17 +70,12 @@ suboptimal_agent = Agent(
     show_tool_calls=True,
     add_datetime_to_instructions=True,
     response_model=SubOptimalApproach,
-    use_json_mode=True
+    use_json_mode=True,
+    exponential_backoff=True,
+    retries=2,
 )
 
 
-class SuboptimalCode(BaseModel):
-    sub_optimal_algorithm: str = Field(description="the optimized algorithm description")
-    sub_optimal_approach: str = Field(description="the optimized approach explanation")
-    problem_statement: str = Field(description="the original problem statement")
-    basic_approach_code: str = Field(description="the basic/brute-force code")
-    sub_optimal_code: str = Field(description="the optimized implementation code")
-    time_space_complexity: str = Field(description="the time and space complexity analysis of the optimized code")
 
 
 sub_agent = Agent(
@@ -109,5 +113,7 @@ sub_agent = Agent(
         "- Demonstrate why the optimization provides better performance"
     ],
     show_tool_calls=True,
-    response_model=SuboptimalCode
+    response_model=SuboptimalCode,
+    exponential_backoff=True,
+    retries=2,
 )

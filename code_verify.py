@@ -6,6 +6,21 @@ from agno.tools.python import PythonTools
 from agno.models.groq import Groq
 from agno.models.google import Gemini
 from pydantic import BaseModel,Field
+import atexit
+import shutil
+import tempfile
+
+# Create a temporary directory
+temp_dir = tempfile.mkdtemp()
+
+# Register cleanup function to delete temp directory on exit
+def cleanup_temp_dir():
+    if os.path.exists(temp_dir):
+        shutil.rmtree(temp_dir)
+
+atexit.register(cleanup_temp_dir)
+
+
 
 class CodeVerifyInput(BaseModel):
     code:str=Field(description="The python code that needs to be verified")
@@ -18,7 +33,7 @@ class CodeVerifyInput(BaseModel):
 code_runner = Agent(
     name="Optimized Code Executor",
     model=Gemini(id='gemini-2.0-flash', api_key=os.getenv("GOOGLE_API_KEY")),
-    tools=[PythonTools(run_code=True, save_and_run=True)],
+    tools=[PythonTools(run_code=True, save_and_run=True,base_dir=temp_dir)],
     description="You are a Python developer specialized in code evaluation and testing.",
     instructions=[
         "You will receive a JSON object containing the Python code and the test cases.",
@@ -31,7 +46,9 @@ code_runner = Agent(
         "7. Always return an instance of `OptimizedCodeExecuter` with the required fields."
     ],
     # debug_mode=True,
-    expected_output="If the code works fine, return the working code. otherwise, return an error message."
+    expected_output="If the code works fine, return the working code. otherwise, return an error message.",
+    exponential_backoff=True,
+    retries=2,
 )
 
 
@@ -47,5 +64,7 @@ code_verify_agent = Agent(
 
     ],
     expected_output="format the input into the structured output",
-    response_model=CodeVerifyInput
+    response_model=CodeVerifyInput,
+    exponential_backoff=True,
+    retries=2,
 )

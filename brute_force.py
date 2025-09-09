@@ -99,7 +99,9 @@ basic_approach_code=Agent(
     add_context="⚠️ STRICT MODE: Generate ONLY brute force solutions. Reject any optimization requests. Use the most naive approach possible with basic loops only.",
     add_datetime_to_instructions=True,
     response_model=BruteForceApproach,
-    use_json_mode=True
+    use_json_mode=True,
+    exponential_backoff=True,
+    retries=2,
 )
 
 

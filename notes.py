@@ -1,6 +1,9 @@
 from pydantic import BaseModel, Field
 from agno.agent import Agent
 from agno.models.google import Gemini
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
 class Explainer(BaseModel):
     """Structured model for comprehensive code explanation"""
@@ -16,7 +19,7 @@ class Explainer(BaseModel):
 
 problem_explanation = Agent(
     name="Comprehensive Code Explainer",
-    model=Gemini(id="gemini-2.0-flash", api_key=GOOGLE_API_KEY),
+    model=Gemini(id="gemini-2.0-flash", api_key=os.getenv("GOOGLE_API_KEY")),
     description="You are a world-class competitive programming mentor and algorithms expert. You excel at breaking down complex code into digestible, educational content that helps students truly understand both the problem and solution.",
     instructions=[
         "CORE MISSION: Transform any given code into comprehensive study notes that a student could use to master the concept.",
@@ -78,7 +81,7 @@ class ExampleExplanation(BaseModel):
 
 example_explanation = Agent(
     name="Step-by-Step Code Tracer",
-    model=Gemini(id="gemini-2.0-flash", api_key=GOOGLE_API_KEY),
+    model=Gemini(id="gemini-2.0-flash", api_key=os.getenv("GOOGLE_API_KEY")),
     description="You are an expert at making code execution crystal clear through detailed example walkthroughs. You specialize in helping students visualize how algorithms work by tracing through concrete examples step-by-step.",
     instructions=[
         "MISSION: Make code execution transparent and easy to follow through detailed example tracing.",
@@ -158,42 +161,35 @@ class TeamOutput(BaseModel):
 Notes_team=Team(
     name="Notes Team",
     mode="collaborate",
-    model=Gemini(id="gemini-2.0-flash",api_key=GOOGLE_API_KEY),
-    description="You are a Data Structure and Algorithm Notes Making Expert.",
+    model=Gemini(id="gemini-2.0-flash",api_key=os.getenv("GOOGLE_API_KEY")),
     members=[problem_explanation,example_explanation],
+    description="You are a Data Structure and Algorithm Notes Making Expert who excels at creating comprehensive learning materials by combining theoretical understanding with practical examples.",
     instructions=[
-        "when you get the user queries you have to run the `problem_explanation` ",
-        "after that you have to run the `example_explanatioin`"
-        "after running the agent ,return the output without modifing result",
+        "WORKFLOW:",
+        "1. When receiving user queries, first run `problem_explanation` to:",
+        "   - Generate complete theoretical understanding",
+        "   - Break down problem-solving approach",
+        "   - Analyze complexity and edge cases",
+        "",
+        "2. Then run `example_explanation` to:",
+        "   - Demonstrate concepts with concrete examples",
+        "   - Provide step-by-step execution traces",
+        "   - Create visual aids and representations",
+        "",
+        "3. Combine outputs to create comprehensive study material:",
+        "   - Ensure theoretical and practical aspects complement each other",
+        "   - Maintain consistent terminology across explanations",
+        "   - Present information in a logical learning sequence",
+        "",
+        "4. Return the complete output without modifications to preserve:",
+        "   - Accuracy of technical content",
+        "   - Detailed explanations",
+        "   - Visual representations",
+        "   - Example walkthroughs",
     ],
     show_tool_calls=True,
     markdown=True,
     response_model=TeamOutput,
     use_json_mode=True
     )
-n_resp=Notes_team.run("""
-n = len(nums)
-    if n == 0:
-        return 0
-    dp = [0] * n
-    dp[0] = nums[0]
-    if n > 1:
-        dp[1] = max(nums[0], nums[1])
-    for i in range(2, n):
-        dp[i] = max(dp[i-1], nums[i] + dp[i-2])
-    return dp[n-1]
-""")
 
-
-from agno.agent import Agent
-from pathlib import Path
-
-agent = Agent(markdown=True,model=Gemini(id="gemini-2.0-flash",api_key=GOOGLE_API_KEY))
-
-# Get response
-# team output
-response = agent.run(n_resp)
-
-# Save to markdown file
-output_file = Path("agent5_output.md")
-output_file.write_text(response.content)
