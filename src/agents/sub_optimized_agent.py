@@ -70,9 +70,7 @@ suboptimal_agent = Agent(
     show_tool_calls=True,
     add_datetime_to_instructions=True,
     response_model=SubOptimalApproach,
-    use_json_mode=True,
-    exponential_backoff=True,
-    retries=2,
+    use_json_mode=True
 )
 
 
@@ -113,7 +111,5 @@ sub_agent = Agent(
         "- Demonstrate why the optimization provides better performance"
     ],
     show_tool_calls=True,
-    response_model=SuboptimalCode,
-    exponential_backoff=True,
-    retries=2,
+    response_model=SuboptimalCode
 )

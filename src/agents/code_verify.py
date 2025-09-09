@@ -45,7 +45,6 @@ code_runner = Agent(
         "6. If the code is working fine, update the code in the `updated_code` section of the Pydantic model and save it to a .py file.",
         "7. Always return an instance of `OptimizedCodeExecuter` with the required fields."
     ],
-    # debug_mode=True,
     expected_output="If the code works fine, return the working code. otherwise, return an error message.",
     exponential_backoff=True,
     retries=2,

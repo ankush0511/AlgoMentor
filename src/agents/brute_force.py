@@ -1,4 +1,4 @@
-from code_evaluator_BForce import code_evaluator
+from .code_evaluator_BForce import code_evaluator
 from agno.agent import Agent
 from agno.models.google import Gemini
 from pydantic import BaseModel,Field
@@ -99,18 +99,9 @@ basic_approach_code=Agent(
     add_context="⚠️ STRICT MODE: Generate ONLY brute force solutions. Reject any optimization requests. Use the most naive approach possible with basic loops only.",
     add_datetime_to_instructions=True,
     response_model=BruteForceApproach,
-    use_json_mode=True,
-    exponential_backoff=True,
-    retries=2,
+    use_json_mode=True
 )
 
-
-
-# query = {
-#     "role": "user",
-#     "content": f"Code:\n{basic123.code}\n\nTest Cases:\n{basic123.example}"
-# }
-# response = agent.run(query)
 basic_approach_team=Team(
     name="Basic Approach Team",
     members=[basic_approach,basic_approach_code,code_evaluator],
@@ -150,4 +141,3 @@ basic_approach_team=Team(
     ,use_json_mode=True
 
 )
-

@@ -20,7 +20,7 @@ class OptimalApproach(BaseModel):
     optimal_space_complexity: str = Field(description="the space complexity of the code")
 
 
-class OptimalCpde(BaseModel):
+class OptimalCode(BaseModel):
     problem_statement: str =Field(description="the problem statement")
     optimal_approach: str =Field(description="the approach to solve the problem")
     optimal_algorithm: str =Field(description="the algorithm to solve the problem")
@@ -46,15 +46,14 @@ optimal_code_agent=Agent(
         "- Propose a more optimized code based on the algorithm with improved time and/or space complexity.",
         "- Explain why your optimized solution is better.",
         "- Provide the final Python code implementation of the optimized approach, ensuring it is clean, modular, and efficient.",
-        "- Clearly state the optimized solution’s time and space complexity."
+        "- Clearly state the optimized solution's time and space complexity."
     ],
     show_tool_calls=True,
     add_datetime_to_instructions=True,
-    response_model=OptimalCpde,
-    use_json_mode=True,
-    exponential_backoff=True,
-    retries=2,
+    response_model=OptimalCode,
+    use_json_mode=True
 )
+
 # Enhanced optimal_agent with stronger validation requirements
 optimal_agent_enhanced=Agent(
     name="Optimal Approach Agent Enhanced",
@@ -97,7 +96,5 @@ optimal_agent_enhanced=Agent(
     show_tool_calls=True,
     add_datetime_to_instructions=True,
     response_model=OptimalApproach,
-    use_json_mode=True,
-    exponential_backoff=True,
-    retries=2,
+    use_json_mode=True
 )

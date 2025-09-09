@@ -192,4 +192,3 @@ Notes_team=Team(
     response_model=TeamOutput,
     use_json_mode=True
     )
-

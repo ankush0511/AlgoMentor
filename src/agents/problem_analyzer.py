@@ -1,6 +1,6 @@
 import time
-from qution_finder import question_finder
-from brute_force import basic_approach_team
+from .qution_finder import question_finder
+from .brute_force import basic_approach_team
 from agno.team import Team
 from pydantic import BaseModel,Field
 from agno.models.google import Gemini
