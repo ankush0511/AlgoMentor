@@ -1,6 +1,6 @@
 # DSA Assistant 🚀
 
-Your AI-powered companion for mastering Data Structures & Algorithms
+Your AI-powered coding mentor for problem-solving & algorithm optimization
 
 ## ✨ Features
 
