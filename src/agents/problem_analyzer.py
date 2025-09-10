@@ -1,30 +1,24 @@
-import time
+import streamlit as st
 from .qution_finder import question_finder
 from .brute_force import basic_approach_team
 from agno.team import Team
-from pydantic import BaseModel,Field
+from ..models.schemas import LeetCode
 from agno.models.google import Gemini
 import os
 from dotenv import load_dotenv
 load_dotenv()
-class LeetCode(BaseModel):
-    user_input:str
-    constraints:str
-    examples:list[str]
-    problem_statement: str =Field(description="the problem statement")
-    basic_approach: str =Field(description="the approach to solve the problem")
-    basic_algorithm: str =Field(description="the algorithm to solve the problem")
-    basic_time_complexity: str = Field(description="the time complexity of the algorithm or code")
-    basic_space_complexity: str = Field(description="the space complexity of the algorithm or code")
-    basic_code: str = Field(description="the code to solve the problem")
-    
 
+# groq_api_key=os.getenv('GROQ_API_KEY')
+# google_api_key=os.getenv('GOOGLE_API_KEY')
+
+groq_api_key=st.secrets['GROQ_API_KEY']
+google_api_key=st.secret['GOOGLE_API_KEY']
 
 leetcode_team=Team(
     name="Leetcode Team",
     mode='collaborate',
     members=[question_finder,basic_approach_team],
-    model=Gemini(id='gemini-2.0-flash',api_key=os.getenv('GOOGLE_API_KEY')),
+    model=Gemini(id='gemini-2.0-flash',api_key=google_api_key),
     description="You are an expert DSA problem analysis team that transforms raw problem statements into structured, comprehensive problem breakdowns with brute-force solutions.",
     instructions=[
         "PROBLEM ANALYSIS WORKFLOW:",

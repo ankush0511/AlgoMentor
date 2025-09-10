@@ -1,38 +1,22 @@
 from agno.agent import Agent
-from pydantic import BaseModel, Field
+from ..models.schemas import SubOptimalApproach,SuboptimalCode
 from agno.models.groq import Groq
 from agno.tools.python import PythonTools
+import streamlit as st
 from agno.models.google import Gemini
 import os
 from dotenv import load_dotenv
 load_dotenv()
 
-
-class SubOptimalApproach(BaseModel):
-    problem_statement: str = Field(description="the problem statement")
-    basic_approach: str = Field(description="the approach to solve the problem")
-    basic_algorithm: str = Field(description="the algorithm to solve the problem")
-    basic_time_complexity: str = Field(description="the time complexity of the algorithm or code")
-    basic_space_complexity: str = Field(description="the space complexity of the algorithm or code")
-    basic_code: str = Field(description="the code to solve the problem")
-    suboptimal_approach: str = Field(description="the optimized approach to solve the problem")
-    suboptimal_algorithm: str = Field(description="the optimized algorithm to solve the problem")
-    suboptimal_time_complexity: str = Field(description="the time complexity of the optimized algorithm")
-    suboptimal_space_complexity: str = Field(description="the space complexity of the optimized algorithm")
-
-class SuboptimalCode(BaseModel):
-    sub_optimal_algorithm: str = Field(description="the optimized algorithm description")
-    sub_optimal_approach: str = Field(description="the optimized approach explanation")
-    problem_statement: str = Field(description="the original problem statement")
-    basic_approach_code: str = Field(description="the basic/brute-force code")
-    sub_optimal_code: str = Field(description="the optimized implementation code")
-    time_space_complexity: str = Field(description="the time and space complexity analysis of the optimized code")
-
+# groq_api_key=os.getenv('GROQ_API_KEY')
+# google_api_key=os.getenv('GOOGLE_API_KEY')
+groq_api_key=st.secrets['GROQ_API_KEY']
+google_api_key=st.secret['GOOGLE_API_KEY']
 
 
 suboptimal_agent = Agent(
     name="Algorithm Optimization Specialist",
-    model=Groq(id='llama-3.3-70b-versatile', api_key=os.getenv("GROQ_API_KEY")),
+    model=Groq(id='llama-3.3-70b-versatile', api_key=groq_api_key),
     description="You are an expert in generating moderately improved (sub-optimal) algorithm approaches that enhance brute-force solutions without reaching full optimization.",
     instructions=[
         "🚨 CRITICAL: ALWAYS PROVIDE SUB-OPTIMAL SOLUTIONS ONLY. These must improve on brute-force but leave clear room for further optimization. NEVER provide the most efficient (optimal) approach.",
@@ -78,7 +62,7 @@ suboptimal_agent = Agent(
 
 sub_agent = Agent(
     name="Optimized Code Implementation Specialist",
-    model=Gemini(id="gemini-2.0-flash", api_key=os.getenv("GOOGLE_API_KEY")),
+    model=Gemini(id="gemini-2.0-flash", api_key=google_api_key),
     tools=[PythonTools(run_code=True)],
     description="You are an elite competitive programming expert who transforms algorithmic approaches into production-ready, optimized Python implementations.",
     instructions=[

@@ -1,9 +1,4 @@
-"""
-DSA Assistant - Main Entry Point
-Your AI-powered companion for mastering Data Structures & Algorithms
-"""
-
-import streamlit as st
+import patch_sqlite 
 from src.core.app import DSAAssistantApp
 from config.settings import PAGE_TITLE, PAGE_LAYOUT, SIDEBAR_STATE
 

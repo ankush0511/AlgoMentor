@@ -1,25 +1,21 @@
-from pydantic import BaseModel, Field
 from agno.agent import Agent
 from agno.models.google import Gemini
+from agno.team import Team
 import os
+import streamlit as st
+from ..models.schemas import Explainer,ExampleExplanation,TeamOutput
 from dotenv import load_dotenv
 load_dotenv()
 
-class Explainer(BaseModel):
-    """Structured model for comprehensive code explanation"""
-    code: str = Field(description="The original code to explain")
-    problem_statement: str = Field(description="Clear restatement of what problem this code solves")
-    approach_summary: str = Field(description="High-level algorithm approach and key insights")
-    detailed_approach: str = Field(description="Step-by-step breakdown of the solution strategy")
-    time_complexity: str = Field(description="Detailed time complexity analysis with explanation")
-    space_complexity: str = Field(description="Detailed space complexity analysis with explanation")
-    code_walkthrough: str = Field(description="Section-wise code explanation with logic breakdown")
-    edge_cases: str = Field(description="Important edge cases and how the code handles them")
-    key_concepts: str = Field(description="Important algorithms, data structures, or programming concepts used")
+# groq_api_key=os.getenv('GROQ_API_KEY')
+# google_api_key=os.getenv('GOOGLE_API_KEY')
+groq_api_key=st.secrets['GROQ_API_KEY']
+google_api_key=st.secret['GOOGLE_API_KEY']
+
 
 problem_explanation = Agent(
     name="Comprehensive Code Explainer",
-    model=Gemini(id="gemini-2.0-flash", api_key=os.getenv("GOOGLE_API_KEY")),
+    model=Gemini(id="gemini-2.0-flash", api_key=google_api_key),
     description="You are a world-class competitive programming mentor and algorithms expert. You excel at breaking down complex code into digestible, educational content that helps students truly understand both the problem and solution.",
     instructions=[
         "CORE MISSION: Transform any given code into comprehensive study notes that a student could use to master the concept.",
@@ -69,19 +65,10 @@ problem_explanation = Agent(
     markdown=True
 )
 
-class ExampleExplanation(BaseModel):
-    """Structured model for step-by-step example walkthrough"""
-    code: str = Field(description="The original code being demonstrated")
-    example_input: str = Field(description="The chosen example input with explanation of why it's good")
-    step_by_step_trace: str = Field(description="Detailed execution trace showing variable states")
-    visual_representation: str = Field(description="ASCII art or visual representation if helpful")
-    intermediate_outputs: str = Field(description="Key intermediate results and their significance")
-    final_result: str = Field(description="Final output with verification")
-    alternative_examples: str = Field(description="Brief mention of other test cases and their outcomes")
 
 example_explanation = Agent(
     name="Step-by-Step Code Tracer",
-    model=Gemini(id="gemini-2.0-flash", api_key=os.getenv("GOOGLE_API_KEY")),
+    model=Gemini(id="gemini-2.0-flash", api_key=google_api_key),
     description="You are an expert at making code execution crystal clear through detailed example walkthroughs. You specialize in helping students visualize how algorithms work by tracing through concrete examples step-by-step.",
     instructions=[
         "MISSION: Make code execution transparent and easy to follow through detailed example tracing.",
@@ -138,30 +125,10 @@ example_explanation = Agent(
 
 
 
-from agno.team import Team
-from agno.agent import Agent
-from agno.models.google import Gemini
-
-class TeamOutput(BaseModel):
-    code: str = Field(description="The original code to explain")
-    problem_statement: str = Field(description="Clear restatement of what problem this code solves")
-    approach_summary: str = Field(description="High-level algorithm approach and key insights")
-    detailed_approach: str = Field(description="Step-by-step breakdown of the solution strategy")
-    time_complexity: str = Field(description="Detailed time complexity analysis with explanation")
-    space_complexity: str = Field(description="Detailed space complexity analysis with explanation")
-    code_walkthrough: str = Field(description="Section-wise code explanation with logic breakdown")
-    edge_cases: str = Field(description="Important edge cases and how the code handles them")
-    key_concepts: str = Field(description="Important algorithms, data structures, or programming concepts used")
-    example_input: str = Field(description="The chosen example input with explanation of why it's good")
-    step_by_step_trace: str = Field(description="Detailed execution trace showing variable states")
-    visual_representation: str = Field(description="ASCII art or visual representation if helpful")
-    intermediate_outputs: str = Field(description="Key intermediate results and their significance")
-    final_result: str = Field(description="Final output with verification")
-
 Notes_team=Team(
     name="Notes Team",
     mode="collaborate",
-    model=Gemini(id="gemini-2.0-flash",api_key=os.getenv("GOOGLE_API_KEY")),
+    model=Gemini(id="gemini-2.0-flash",api_key=google_api_key),
     members=[problem_explanation,example_explanation],
     description="You are a Data Structure and Algorithm Notes Making Expert who excels at creating comprehensive learning materials by combining theoretical understanding with practical examples.",
     instructions=[

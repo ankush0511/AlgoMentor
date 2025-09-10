@@ -1,14 +1,8 @@
-"""
-Core DSA Assistant Application
-"""
-
 import streamlit as st
 import time
 import os
 from agno.agent import Agent
 from agno.models.google import Gemini
-
-# Import agents with relative imports
 from ..agents.problem_analyzer import leetcode_team
 from ..agents.sub_optimized_agent import suboptimal_agent, sub_agent
 from ..agents.code_verify import code_runner, code_verify_agent
@@ -49,7 +43,7 @@ class DSAAssistantApp:
         st.markdown("""
         <style>
             .main-header {
-                background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+                background: linear-gradient(90deg, #667eea 0%, #764ba2 0%);
                 padding: 2.5rem;
                 border-radius: 12px;
                 color: white;
@@ -59,7 +53,7 @@ class DSAAssistantApp:
             }
             
             .step-card {
-                background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+                background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 0%);
                 padding: 2rem;
                 border-radius: 12px;
                 border-left: 6px solid #4f46e5;
@@ -73,7 +67,7 @@ class DSAAssistantApp:
             }
             
             .content-card {
-                background: white;
+                background: black;
                 padding: 1.5rem;
                 border-radius: 10px;
                 box-shadow: 0 2px 8px rgba(0,0,0,0.1);
@@ -224,8 +218,8 @@ class DSAAssistantApp:
         
         with col2:
             st.markdown("#### ⚡ Complexity")
-            st.metric("Time", basic_approach.basic_time_complexity)
-            st.metric("Space", basic_approach.basic_space_complexity)
+            st.metric("Time complexity", basic_approach.basic_time_complexity)
+            st.metric("Space complexity", basic_approach.basic_space_complexity)
         
         st.markdown("#### 🔢 Algorithm Steps")
         st.code(basic_approach.basic_algorithm, language="text")
@@ -282,8 +276,8 @@ class DSAAssistantApp:
         
         with col2:
             st.markdown("#### ⚡ Improved Complexity")
-            st.metric("Time & Space", sub_optimal_verified.time_complexity)
-            st.metric("Time & Space", sub_optimal_verified.space_complexity)
+            st.metric("Time complexity", sub_optimal_verified.time_complexity)
+            st.metric("Space complexity", sub_optimal_verified.space_complexity)
         
         st.markdown("#### 🔢 Sub-Optimal Algorithm")
         st.code(sub_optimal_app.suboptimal_algorithm, language="text")
@@ -471,7 +465,7 @@ class DSAAssistantApp:
             
             status_text.text("🔄 Analyzing code structure...")
             progress_bar.progress(25)
-            time.sleep(0.5)
+            time.sleep(1)
             
             status_text.text("🧠 Generating comprehensive notes...")
             progress_bar.progress(50)
@@ -479,7 +473,8 @@ class DSAAssistantApp:
             resp = Notes_team.run(input_code, markdown=True).content
             progress_bar.progress(75)
             
-            api_key = os.getenv('GOOGLE_API_KEY')
+            # api_key = os.getenv('GOOGLE_API_KEY')
+            api_key = st.secrets['GOOGLE_API_KEY']
             if not api_key:
                 st.error("🔑 Google API key not found. Please check your .env file.")
                 return

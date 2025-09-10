@@ -1,13 +1,14 @@
-"""Application configuration settings"""
-
+import streamlit as st
 import os
 from dotenv import load_dotenv
 
 load_dotenv()
 
 # API Configuration
-GROQ_API_KEY = os.getenv("GROQ_API_KEY")
-GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+# GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+# GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+groq_api_key=st.secrets['GROQ_API_KEY']
+google_api_key=st.secret['GOOGLE_API_KEY']
 
 # Model Configuration
 GROQ_MODEL = "llama-3.3-70b-versatile"

@@ -1,29 +1,24 @@
 from .code_evaluator_BForce import code_evaluator
 from agno.agent import Agent
 from agno.models.google import Gemini
-from pydantic import BaseModel,Field
+import streamlit as st
 from agno.tools.python import PythonTools
 from agno.models.groq import Groq
 from agno.team import Team
+from ..models.schemas import BruteForceApproach
 from dotenv import load_dotenv
-load_dotenv()
 import os
+load_dotenv()
 
-
-class BruteForceApproach(BaseModel):
-    problem_statement: str =Field(description="the problem statement")
-    basic_approach: str =Field(description="the basic or bruteforce approach to solve the problem")
-    basic_algorithm: str =Field(description="the basic or bruteforce algorithm to solve the problem")
-    basic_time_complexity: str = Field(description="the time complexity of the algorithm or code")
-    basic_space_complexity: str = Field(description="the space complexity of the algorithm or code")
-    code: str = Field(description="the code to solve the problem")
-    updated_code: str = Field(description="the updated and working code to solve the problem")
-
+groq_api_key=st.secrets['GROQ_API_KEY']
+google_api_key=st.secret['GOOGLE_API_KEY']
+# groq_api_key=os.getenv('GROQ_API_KEY')
+# google_api_key=os.getenv('GOOGLE_API_KEY')
 
 
 basic_approach=Agent(
     name='Basic Approach',
-    model=Groq(id='llama-3.3-70b-versatile', api_key=os.getenv('GROQ_API_KEY')),
+    model=Groq(id='llama-3.3-70b-versatile', api_key=groq_api_key),
     description='This agent specializes in providing clear, straightforward brute force solutions to programming problems using the most basic and intuitive approaches.',
     instructions=[
         "🚨 CRITICAL CONSTRAINT: You are EXCLUSIVELY a Brute Force Solution Agent - ZERO optimizations permitted!",
@@ -72,7 +67,7 @@ basic_approach=Agent(
 basic_approach_code=Agent(
     name="Basic Approach code",
     tools=[PythonTools()],
-    model=Groq(id='llama-3.3-70b-versatile', api_key=os.getenv('GROQ_API_KEY')),
+    model=Groq(id='llama-3.3-70b-versatile', api_key=groq_api_key),
     description="Brute force algorithm specialist that ONLY implements the most naive, inefficient solutions using basic loops and simple logic",
     instructions=[
         "🚨 CRITICAL: You are STRICTLY a Brute Force Solver Agent - NO OPTIMIZATIONS ALLOWED!",
@@ -106,7 +101,7 @@ basic_approach_team=Team(
     name="Basic Approach Team",
     members=[basic_approach,basic_approach_code,code_evaluator],
     mode="collaborate",
-    model=Gemini(id='gemini-2.0-flash',api_key=os.getenv("GOOGLE_API_KEY")),
+    model=Gemini(id='gemini-2.0-flash',api_key=google_api_key),
     description="This team is designed to answer questions about the basic approach to the users question",
     instructions=[
         "BRUTE FORCE SOLUTION WORKFLOW:",

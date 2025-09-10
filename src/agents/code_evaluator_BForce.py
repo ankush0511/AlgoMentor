@@ -1,6 +1,7 @@
 from agno.agent import Agent
 from agno.tools.python import PythonTools
 from agno.models.groq import Groq
+import streamlit as st
 import os
 from dotenv import load_dotenv
 load_dotenv()
@@ -11,7 +12,6 @@ import tempfile
 
 # Create a temporary directory
 temp_dir = tempfile.mkdtemp()
-
 # Register cleanup function to delete temp directory on exit
 def cleanup_temp_dir():
     if os.path.exists(temp_dir):
@@ -19,9 +19,12 @@ def cleanup_temp_dir():
 
 atexit.register(cleanup_temp_dir)
 
+# groq_api_key=os.getenv('GROQ_API_KEY')
+groq_api_key=st.secrets['GROQ_API_KEY']
+
 code_evaluator = Agent(
     tools=[PythonTools(run_code=True,save_and_run=True,base_dir=temp_dir)],
-    model=Groq(id="llama-3.3-70b-versatile",api_key=os.getenv("GROQ_API_KEY")),
+    model=Groq(id="llama-3.3-70b-versatile",api_key=groq_api_key),
     description="You are a Python developer specialized in code evaluation and testing.",
     instructions=[
         "you will recive a json object that contains the python code and the test_cases."

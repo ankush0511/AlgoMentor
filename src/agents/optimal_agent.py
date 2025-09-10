@@ -1,36 +1,21 @@
 from agno.agent import Agent
-from pydantic import BaseModel, Field
+from ..models.schemas import OptimalApproach,OptimalCode
 from agno.models.groq import Groq
 from agno.tools.python import PythonTools
+import streamlit as st
 from agno.models.google import Gemini
 import os
 from dotenv import load_dotenv
 load_dotenv()
 
-
-class OptimalApproach(BaseModel):
-    problem_statement: str =Field(description="the problem statement")
-    suboptimal_approach: str =Field(description="the approach to solve the problem")
-    suboptimal_algorithm: str =Field(description="the algorithm to solve the problem")
-    suboptimal_time_complexity: str = Field(description="the time complexity of the algorithm or code")
-    suboptimal_space_complexity: str = Field(description="the space complexity of the algorithm or code")
-    optimal_approach: str =Field(description="the most optimal approach to solve the problem")
-    optimal_algorithm: str =Field(description="the most optimal algorithm to solve the problem")
-    optimal_time_complexity: str = Field(description="the time complexity of the code")
-    optimal_space_complexity: str = Field(description="the space complexity of the code")
-
-
-class OptimalCode(BaseModel):
-    problem_statement: str =Field(description="the problem statement")
-    optimal_approach: str =Field(description="the approach to solve the problem")
-    optimal_algorithm: str =Field(description="the algorithm to solve the problem")
-    optimal_time_space_complexity: str = Field(description="the time and space complexity of the code")
-    optimal_code: str = Field(description="the most optimal code to solve the problem")
-
+# googel_api_key=os.getenv('GOOGLE_API_KEY')
+# groq_api_key=os.getenv('GROQ_API_KEY')
+groq_api_key=st.secrets['GROQ_API_KEY']
+google_api_key=st.secret['GOOGLE_API_KEY']
 
 optimal_code_agent=Agent(
     name="optimal code writter",
-    model=Gemini(id='gemini-2.0-flash',api_key=os.getenv("GOOGLE_API_KEY")),
+    model=Gemini(id='gemini-2.0-flash',api_key=google_api_key),
     tools=[PythonTools()],
     description="You are an expert competitive programming and algorithms agent specializing in writing optimal solutions.",
     instructions=[
@@ -57,7 +42,7 @@ optimal_code_agent=Agent(
 # Enhanced optimal_agent with stronger validation requirements
 optimal_agent_enhanced=Agent(
     name="Optimal Approach Agent Enhanced",
-    model=Groq(id='llama-3.3-70b-versatile', api_key=os.getenv("GROQ_API_KEY")),
+    model=Groq(id='llama-3.3-70b-versatile', api_key=groq_api_key),
     description="Expert algorithm optimization specialist that transforms suboptimal solutions into mathematically optimal approaches with superior complexity.",
     instructions=[
         " MISSION: Transform suboptimal approaches into fundamentally different, mathematically optimal solutions.",
