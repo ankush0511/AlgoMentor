@@ -1,4 +1,5 @@
 import patch_sqlite 
+import streamlit as st
 from src.core.app import DSAAssistantApp
 from config.settings import PAGE_TITLE, PAGE_LAYOUT, SIDEBAR_STATE
 
