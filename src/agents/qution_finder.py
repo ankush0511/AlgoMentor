@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # google_api_key=os.getenv("GOOGLE_API_KEY")
-google_api_key=st.secret['GOOGLE_API_KEY']
+google_api_key=st.secrets['GOOGLE_API_KEY']
 
 
 # Agent without tools for structured output

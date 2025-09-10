@@ -11,7 +11,7 @@ load_dotenv()
 # googel_api_key=os.getenv('GOOGLE_API_KEY')
 # groq_api_key=os.getenv('GROQ_API_KEY')
 groq_api_key=st.secrets['GROQ_API_KEY']
-google_api_key=st.secret['GOOGLE_API_KEY']
+google_api_key=st.secrets['GOOGLE_API_KEY']
 
 optimal_code_agent=Agent(
     name="optimal code writter",

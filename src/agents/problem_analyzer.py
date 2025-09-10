@@ -12,7 +12,7 @@ load_dotenv()
 # google_api_key=os.getenv('GOOGLE_API_KEY')
 
 groq_api_key=st.secrets['GROQ_API_KEY']
-google_api_key=st.secret['GOOGLE_API_KEY']
+google_api_key=st.secrets['GOOGLE_API_KEY']
 
 leetcode_team=Team(
     name="Leetcode Team",
