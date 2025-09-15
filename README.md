@@ -17,8 +17,8 @@ Your AI-powered coding mentor for problem-solving & algorithm optimization
 
 ```bash
 # Clone the repository
-git clone <your-repo-url>
-cd DSAAssistant
+git clone https://github.com/ankush0511/AlgoMentor.git
+cd AlgoMentor
 
 # Install dependencies
 pip install -r requirements.txt
