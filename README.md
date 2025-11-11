@@ -1,4 +1,4 @@
-# DSA Assistant 🚀
+# Algo Mentor 🚀
 
 Your AI-powered companion for mastering Data Structures & Algorithms
 
@@ -18,7 +18,7 @@ Your AI-powered companion for mastering Data Structures & Algorithms
 ```bash
 # Clone the repository
 git clone <your-repo-url>
-cd DSAAssistant
+cd AlgoMentor
 
 # Install dependencies
 pip install -r requirements.txt
@@ -45,7 +45,7 @@ streamlit run main.py
 ## 📁 Project Structure
 
 ```
-DSAAssistant/
+AlgoMentor/
 ├── 📁 src/                    # Source code
 │   ├── 📁 agents/             # AI agents for different optimization levels
 │   ├── 📁 models/             # Pydantic data models

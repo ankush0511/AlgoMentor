@@ -241,17 +241,19 @@ class DSAAssistantApp:
             with st.spinner("Optimizing approach..."):
                 basic_approach = st.session_state.basic_approach
                 sub_optimal_app = suboptimal_agent.run(basic_approach).content
+                time.sleep(10)
                 
                 query_data = {
                     "role": "user",
                     "content": f"sub_optimal_algorithm:{sub_optimal_app.suboptimal_approach},sub_optimal_approach:{sub_optimal_app.suboptimal_approach},problem_statement:{sub_optimal_app.problem_statement},basic_approach:{sub_optimal_app.basic_code}"
                 }
                 sub_optimal_codes = sub_agent.run(query_data).content
-                
+                time.sleep(10)
                 # Test and verify code
                 test_query = f"Code:\n{sub_optimal_codes.sub_optimal_code}\n\nTest Cases:\n{basic_approach.examples}"
                 test_results = code_runner.run(test_query)
                 format_query = f"Code: {sub_optimal_codes.sub_optimal_code}\nTest Results: {test_results.content}\nTest Cases: {basic_approach.examples}"
+                time.sleep(10)
                 sub_optimal_code_verified = code_verify_agent.run(format_query).content
                 
                 st.session_state.sub_optimal_verified = sub_optimal_code_verified
@@ -298,6 +300,7 @@ class DSAAssistantApp:
         if st.button("🔓 Unlock Optimal Solution", type="primary", use_container_width=True):
             with st.spinner("Finding the most optimal solution..."):
                 optimal_approaches = optimal_agent_enhanced.run(st.session_state.sub_optimal_verified).content
+                time.sleep(10)
                 optimal_ap_code = optimal_code_agent.run(optimal_approaches).content
                 
                 # Test optimal code
@@ -305,6 +308,7 @@ class DSAAssistantApp:
                 test_query = f"Code:\n{optimal_ap_code.optimal_code}\n\nTest Cases:\n{basic_approach.examples}"
                 test_results = code_runner.run(test_query)
                 format_query = f"Code: {optimal_ap_code.optimal_code}\nTest Results: {test_results.content}\nTest Cases: {basic_approach.examples}"
+                time.sleep(10)
                 optimal_code_verified = code_verify_agent.run(format_query).content
                 
                 st.session_state.optimal_verified = optimal_code_verified
@@ -473,8 +477,8 @@ class DSAAssistantApp:
             resp = Notes_team.run(input_code, markdown=True).content
             progress_bar.progress(75)
             
-            # api_key = os.getenv('GOOGLE_API_KEY')
-            api_key = st.secrets['GOOGLE_API_KEY']
+            api_key = os.getenv('GOOGLE_API_KEY')
+            # api_key = st.secrets['GOOGLE_API_KEY']
             if not api_key:
                 st.error("🔑 Google API key not found. Please check your .env file.")
                 return
