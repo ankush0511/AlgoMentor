@@ -1,6 +1,6 @@
 # Algo Mentor 🚀
 
-Your AI-powered companion for mastering Data Structures & Algorithms
+Your AI-powered coding mentor for problem-solving & algorithm optimization
 
 ## ✨ Features
 
@@ -17,7 +17,7 @@ Your AI-powered companion for mastering Data Structures & Algorithms
 
 ```bash
 # Clone the repository
-git clone <your-repo-url>
+git clone https://github.com/ankush0511/AlgoMentor.git
 cd AlgoMentor
 
 # Install dependencies
@@ -77,7 +77,7 @@ AlgoMentor/
 3. Make your changes
 4. Add tests if applicable
 5. Submit a pull request
-
+6. Download the Docker image at `ankush0511/algomentor`
 ## 📄 License
 
 This project is licensed under the MIT License.
